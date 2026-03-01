@@ -1,0 +1,32 @@
+﻿@model Canteen.Models.Order
+
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="container text-center mt-4 mb-5 py-4">
+    <div class="card shadow border-0 mx-auto" style="max-width: 600px; border-radius: 15px;">
+        <div class="card-body py-5">
+            <h1 class="text-success fw-bold" style="font-size: 4rem;"><i class="bi bi-check-circle-fill"></i> ✓</h1>
+            <h2 class="fw-bold mt-3 text-dark">Đặt hàng thành công!</h2>
+            <p class="text-muted fs-5 mt-2 mb-4">Mã đơn hàng của bạn là: <strong>#@Model.Id</strong></p>
+
+            <hr class="w-75 mx-auto" />
+
+            <div class="mt-4 bg-light p-4 rounded-3 border">
+                <h5 class="fw-bold text-danger mb-3">Vui lòng thanh toán: @Model.TotalAmount.ToString("N0") VNĐ</h5>
+                <p class="text-muted small">Mở ứng dụng ngân hàng và quét mã QR bên dưới để thanh toán.</p>
+
+                <img src="https://img.vietqr.io/image/970436-0123456789-compact.jpg?amount=@Model.TotalAmount&addInfo=Thanh toan don hang @Model.Id&accountName=CANTEEN CD2"
+                     alt="Mã QR Thanh Toán"
+                     class="img-fluid rounded border border-2 shadow-sm"
+                     style="max-width: 280px;" />
+            </div>
+
+            <div class="mt-5">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary fw-bold px-4 py-2 me-2">Tiếp tục mua sắm</a>
+                <a asp-controller="Orders" asp-action="History" class="btn btn-primary fw-bold px-4 py-2">Xem lịch sử đơn</a>
+            </div>
+        </div>
+    </div>
+</div>
