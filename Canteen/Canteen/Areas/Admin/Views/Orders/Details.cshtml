@@ -1,0 +1,85 @@
+﻿@model Canteen.Models.Order
+@{
+    ViewData["Title"] = "Chi tiết Đơn hàng #" + Model.Id;
+}
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+        <h4 class="mb-0">Chi tiết Đơn hàng #@Model.Id</h4>
+        <span class="fs-5">
+            Trạng thái hiện tại:
+            @if (Model.Status == 0)
+            {
+                <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+            }
+            else if (Model.Status == 1)
+            {
+                <span class="badge bg-info text-dark">Đang chuẩn bị</span>
+            }
+            else if (Model.Status == 2)
+            {
+                <span class="badge bg-success">Hoàn thành</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Đã hủy</span>
+            }
+        </span>
+    </div>
+    <div class="card-body">
+        <p><strong>Khách hàng:</strong> @Model.AppUser?.FullName</p>
+        <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")</p>
+
+        <table class="table table-sm mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Món ăn</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detail in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>@detail.Product.Name</td>
+                        <td>@detail.UnitPrice.ToString("N0") đ</td>
+                        <td>x @detail.Quantity</td>
+                        <td class="fw-bold">@((detail.UnitPrice * detail.Quantity).ToString("N0")) đ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h4 class="text-end text-danger mt-3">Tổng cộng: @Model.TotalAmount.ToString("N0") đ</h4>
+    </div>
+    <div class="card-footer bg-light py-3 d-flex align-items-center">
+
+        <form asp-action="UpdateStatus" method="post" class="me-auto mb-0">
+            <input type="hidden" name="id" value="@Model.Id" />
+            @if (Model.Status == 0)
+            {
+                <button type="submit" name="status" value="1" class="btn btn-info fw-bold text-white">Xác nhận & Chuẩn bị</button>
+            }
+            else if (Model.Status == 1)
+            {
+                <button type="submit" name="status" value="2" class="btn btn-success fw-bold">Giao hàng & Hoàn thành</button>
+            }
+            @if (Model.Status != 2 && Model.Status != 3)
+            {
+                <button type="submit" name="status" value="3" class="btn btn-warning fw-bold">Hủy đơn</button>
+            }
+        </form>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary fw-bold">Quay lại</a>
+
+            <form asp-action="DeleteOrder" method="post" onsubmit="return confirm('⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa vĩnh viễn đơn hàng #@Model.Id khỏi hệ thống không? Dữ liệu này sẽ KHÔNG THỂ khôi phục!');">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-outline-danger fw-bold">
+                    Xóa vĩnh viễn
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Quản lý Tài khoản";
+    var staffs = ViewBag.StaffList as List<Canteen.Models.AppUser>;
+    var customers = ViewBag.CustomerList as List<Canteen.Models.AppUser>;
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger fw-bold">@TempData["Error"]</div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Quản lý Tài khoản</h2>
+    <a asp-action="CreateStaff" class="btn btn-success fw-bold">+ Cấp tài khoản Nhân viên</a>
+</div>
+
+<h4 class="fw-bold text-primary mt-4"><i class="bi bi-person-badge"></i> Tài khoản nhân viên</h4>
+<div class="card shadow-sm border-0 mb-4">
+    <table class="table table-hover align-middle mb-0 text-center">
+        <thead class="table-primary">
+            <tr><th>Họ Tên</th><th>Email</th><th>SĐT</th><th>Thao tác</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var item in staffs)
+            {
+                <tr>
+                    <td class="fw-bold">@item.FullName</td>
+                    <td>@item.Email</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary fw-bold">Sửa</a>
+                            <form asp-action="Delete" method="post" onsubmit="return confirm('Xóa nhân viên này?');">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">Xóa</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<h4 class="fw-bold text-success"><i class="bi bi-people"></i> Tài khoản khách hàng</h4>
+<div class="card shadow-sm border-0">
+    <table class="table table-hover align-middle mb-0 text-center">
+        <thead class="table-success">
+            <tr><th>Họ Tên</th><th>Email</th><th>SĐT</th><th>Thao tác</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var item in customers)
+            {
+                <tr>
+                    <td class="fw-bold">@item.FullName</td>
+                    <td>@item.Email</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>
+                        <form asp-action="Delete" method="post" onsubmit="return confirm('Xóa khách hàng và toàn bộ đơn hàng của họ?');">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

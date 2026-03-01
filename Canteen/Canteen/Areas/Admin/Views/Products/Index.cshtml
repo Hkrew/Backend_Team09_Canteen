@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Canteen.Models.Product>
+@{
+    ViewData["Title"] = "Quản lý Món ăn";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2 class="fw-bold text-primary mb-0">Quản lý Sản phẩm</h2>
+    <a asp-action="Create" class="btn btn-success fw-bold shadow-sm">
+        <i class="bi bi-plus-circle"></i> Thêm Sản phẩm mới
+    </a>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label fw-bold"><i class="bi bi-search"></i> Tìm kiếm:</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Nhập tên sản phẩm cần tìm..." />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary fw-bold">Tìm</button>
+                <a asp-action="Index" class="btn btn-outline-secondary fw-bold ms-1">Tất cả</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th class="text-start">Tên món</th>
+                        <th>Danh mục</th>
+                        <th>Giá bán</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="py-4 text-danger fw-bold">Không tìm thấy sản phẩm nào!</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="@item.Name" style="height: 60px; width: 60px; object-fit: cover; border-radius: 8px;" class="shadow-sm" />
+                                    }
+                                </td>
+                                <td class="text-start fw-bold fs-5">@item.Name</td>
+                                <td><span class="badge bg-secondary">@(item.Category != null ? item.Category.Name : "Chưa có")</span></td>
+                                <td class="text-danger fw-bold fs-5">@item.Price.ToString("N0") đ</td>
+                                <td>
+                                    @if (item.IsAvailable)
+                                    {
+                                        <span class="badge bg-success px-2 py-1">Đang bán</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger px-2 py-1">Ngừng bán</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary fw-bold">Sửa</a>
+                                        <form asp-action="Delete" method="post" onsubmit="return confirm('⚠️ Chắc chắn xóa món [ @item.Name ]?');">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link fw-bold" asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage - 1)" asp-route-searchString="@ViewBag.SearchString">Trước</a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link fw-bold" asp-action="Index" asp-route-pageNumber="@i" asp-route-searchString="@ViewBag.SearchString">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link fw-bold" asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage + 1)" asp-route-searchString="@ViewBag.SearchString">Sau</a>
+            </li>
+
+        </ul>
+    </nav>
+}

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Canteen.Models.Order>
+@{
+    ViewData["Title"] = "Quản lý Đơn hàng";
+}
+
+<h2 class="fw-bold mb-4">Quản lý Đơn hàng</h2>
+
+<table class="table table-bordered table-hover shadow-sm align-middle">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>Mã ĐH</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="fw-bold">#@item.Id</td>
+                <td>@(item.AppUser?.FullName ?? "Khách vãng lai")</td>
+                <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="text-danger fw-bold">@item.TotalAmount.ToString("N0") đ</td>
+                <td>
+                    @if (item.Status == 0)
+                    {
+                        <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                    }
+                    else if (item.Status == 1)
+                    {
+                        <span class="badge bg-info text-dark">Đang chuẩn bị</span>
+                    }
+                    else if (item.Status == 2)
+                    {
+                        <span class="badge bg-success">Hoàn thành</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Đã hủy</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Xử lý đơn</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

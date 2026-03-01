@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Canteen.Models.Category>
+
+@{
+    ViewData["Title"] = "Quản lý Danh mục";
+}
+
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold text-danger mb-0">Quản lý Danh mục</h3>
+            <a asp-action="Create" class="btn btn-success btn-sm fw-bold shadow-sm px-3 py-2">
+                <i class="bi bi-plus-circle"></i> Thêm mới
+            </a>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4">Tên danh mục</th>
+                            <th class="text-center" style="width: 140px;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary fs-5">
+                                    <i class="bi bi-tags-fill me-2 text-secondary"></i> @item.Name
+                                </td>
+                                <td class="text-center p-2">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary fw-bold">Sửa</a>
+
+                                        <form asp-action="Delete" method="post" onsubmit="return confirm('⚠️ Bạn có chắc chắn muốn xóa danh mục [ @item.Name ] không?');">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

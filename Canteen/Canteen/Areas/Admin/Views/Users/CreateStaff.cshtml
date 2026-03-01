@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Cấp tài khoản Nhân viên";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0 fw-bold">Cấp tài khoản Nhân viên mới</h4>
+            </div>
+            <div class="card-body p-4">
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["Error"]</div>
+                }
+
+                <form asp-action="CreateStaff" method="post">
+                    <div class="mb-3">
+                        <label class="fw-bold form-label">Họ và tên nhân viên</label>
+                        <input type="text" name="fullName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold form-label">Email (Tài khoản đăng nhập)</label>
+                        <input type="email" name="email" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold form-label">Số điện thoại</label>
+                        <input type="text" name="phoneNumber" class="form-control" required />
+                    </div>
+                    <div class="mb-4">
+                        <label class="fw-bold form-label">Mật khẩu cấp phát</label>
+                        <input type="text" name="password" class="form-control" placeholder="VD: Nhanvien@123" required />
+                        <small class="text-muted">Mật khẩu phải có chữ hoa, chữ thường, số và ký tự đặc biệt.</small>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success fw-bold flex-grow-1">Tạo tài khoản</button>
+                        <a asp-action="Index" class="btn btn-secondary fw-bold">Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

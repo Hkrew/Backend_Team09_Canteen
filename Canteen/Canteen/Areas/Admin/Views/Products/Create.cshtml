@@ -1,0 +1,49 @@
+﻿@model Canteen.Models.Product
+@{
+    ViewData["Title"] = "Thêm Món ăn";
+}
+
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-8">
+        <div class="card shadow border-0 rounded-3">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0 fw-bold"><i class="bi bi-plus-circle"></i> Thêm Sản phẩm mới</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Name" class="form-label fw-bold">Tên sản phẩm</label>
+                            <input asp-for="Name" class="form-control" placeholder="VD: Bánh mì kẹp thịt..." required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
+                            <input asp-for="Price" type="number" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CategoryId" class="form-label fw-bold">Thuộc Danh mục</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Hình ảnh đại diện</label>
+                            <input type="file" name="imageFile" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-4 form-check form-switch fs-5">
+                        <input class="form-check-input" type="checkbox" asp-for="IsAvailable" checked>
+                        <label class="form-check-label fw-bold text-success" asp-for="IsAvailable">Đang mở bán</label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success fw-bold flex-grow-1"><i class="bi bi-save"></i> Thêm sản phẩm</button>
+                        <a asp-action="Index" class="btn btn-secondary fw-bold">Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
